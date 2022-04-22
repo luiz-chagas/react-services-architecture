@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren } from "react";
 import { HomePage } from "./pages/home";
 import { makeAuthContextProvider } from "./services/auth";
-// import { FakeAuthService } from "./adapters/fake-auth";
-import { FirebaseAuthService } from "./adapters/firebase-auth";
+import { FakeAuthService } from "./adapters/fake-auth";
+// import { FirebaseAuthService } from "./adapters/firebase-auth";
 // import { AWSAuthService } from "./adapters/aws-amplify-auth";
 
 export const composeProviders =
@@ -14,8 +14,8 @@ export const composeProviders =
 // to set up service providers
 
 const AppProviders = composeProviders(
-  // makeAuthContextProvider(FakeAuthService)
-  makeAuthContextProvider(FirebaseAuthService)
+  makeAuthContextProvider(FakeAuthService)
+  // makeAuthContextProvider(FirebaseAuthService)
   // makeAuthContextProvider(AWSAuthService)
 );
 
