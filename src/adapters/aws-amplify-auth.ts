@@ -28,6 +28,9 @@ const onUserChanged: AuthService["onUserChanged"] = (callback) => {
   });
 };
 
+// This function translates a Cognito User to the User type our
+// application has defined, so no Cognito User types will
+// ever leak into our application
 const convertUser = (awsUser: any): User => {
   return {
     email: awsUser.attributes?.email,

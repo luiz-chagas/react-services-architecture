@@ -12,6 +12,8 @@ const fakeUser = {
 
 let contextCallback: (x: User | null) => void = () => void 0;
 
+// IDEA: Save the user object to localStorage on signIn
+// so login persist after refreshing the page
 export const FakeAuthService: AuthService = {
   getUser: () => Promise.resolve(null),
   init: () => void 0,

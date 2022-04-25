@@ -14,16 +14,19 @@ import {
 import { User } from "../models/user";
 
 // This is what external adapters have to implement
-export type UserChangedEventCallback = (x: User | null) => void;
+// Make sure this interface will fulfill all the needs of the application
 export interface AuthService {
   getUser: () => Promise<User | null>;
   init: () => void;
   onUserChanged: (callback: UserChangedEventCallback) => void;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
+  // Other functions to consider: siugnUp, updateUser, deleteAccount, resetPassword, setUpMFA, etc
 }
 
-// This is what our React components will consume
+type UserChangedEventCallback = (x: User | null) => void;
+
+// This is what our React components/hooks will consume
 interface AuthServiceContext {
   currentUser: User | null;
   isLoading: boolean;
