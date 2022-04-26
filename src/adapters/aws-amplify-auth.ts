@@ -1,19 +1,31 @@
-import { AuthService } from "./../services/auth";
+import { AuthErrors, AuthProviders, AuthService } from "./../services/auth";
 import awsConfig from "../aws-exports";
 import { Amplify, Auth, Hub } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import { User } from "../models/user";
 
-const init = () => Amplify.configure(awsConfig);
-const signIn = () =>
-  Auth.federatedSignIn({
-    provider: CognitoHostedUIIdentityProvider.Google,
-  }).then((res) => void 0);
-const signOut = () =>
+const init: AuthService["init"] = () => Amplify.configure(awsConfig);
+
+const signIn: AuthService["signIn"] = async (provider) => {
+  const providerList: Record<AuthProviders, CognitoHostedUIIdentityProvider> = {
+    Facebook: CognitoHostedUIIdentityProvider.Facebook,
+    Google: CognitoHostedUIIdentityProvider.Google,
+  };
+  const selectedProvider = providerList[provider];
+
+  if (!selectedProvider) throw Error(AuthErrors.InvalidProdiver);
+
+  return Auth.federatedSignIn({
+    provider: selectedProvider,
+  }).then(() => void 0);
+};
+
+const signOut: AuthService["signOut"] = () =>
   Auth.signOut({
     global: true,
   });
-const getUser = () =>
+
+const getUser: AuthService["getUser"] = () =>
   Auth.currentAuthenticatedUser()
     .then(convertUser)
     .catch((err) => null);

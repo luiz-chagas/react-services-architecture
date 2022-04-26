@@ -6,10 +6,12 @@ import {
   GoogleAuthProvider,
   getAuth,
   signInWithRedirect,
+  FacebookAuthProvider,
+  AuthProvider as FirebaseAuthProvider,
 } from "firebase/auth";
 import { getApps, initializeApp } from "firebase/app";
 import { User } from "../models/user";
-import { AuthService } from "../services/auth";
+import { AuthErrors, AuthProviders, AuthService } from "../services/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyClXdQIt9upmTwCMMNzlBnz3jWZRqi8rg8",
@@ -19,7 +21,7 @@ const firebaseConfig = {
   measurementId: "G-JCT9H5M586",
 };
 
-const initializeFirebase = () => {
+const initializeFirebase: AuthService["init"] = () => {
   if (getApps().length === 0) {
     initializeApp(firebaseConfig);
   }
@@ -34,7 +36,7 @@ const transformUser = (user: FirebaseUser): User => ({
   name: user.displayName ?? "Visitor",
 });
 
-const getUser = async () => {
+const getUser: AuthService["getUser"] = async () => {
   const firebaseUser = getAuth().currentUser;
 
   if (!firebaseUser) return null;
@@ -49,10 +51,20 @@ const onUserChanged: AuthService["onUserChanged"] = (callback) => {
   });
 };
 
-const signIn = async () =>
-  signInWithRedirect(getAuth(), new GoogleAuthProvider());
+const signIn: AuthService["signIn"] = async (provider) => {
+  const providerList: Record<AuthProviders, FirebaseAuthProvider> = {
+    Facebook: new FacebookAuthProvider(),
+    Google: new GoogleAuthProvider(),
+  };
 
-const signOut = () => getAuth().signOut();
+  const selectedProvider = providerList[provider];
+
+  if (!selectedProvider) throw Error(AuthErrors.InvalidProdiver);
+
+  return signInWithRedirect(getAuth(), selectedProvider);
+};
+
+const signOut: AuthService["signOut"] = () => getAuth().signOut();
 
 export const FirebaseAuthService: AuthService = {
   getUser,
