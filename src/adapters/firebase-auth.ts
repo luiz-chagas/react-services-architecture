@@ -44,12 +44,11 @@ const getUser: AuthService["getUser"] = async () => {
   return transformUser(firebaseUser);
 };
 
-const onUserChanged: AuthService["onUserChanged"] = (callback) => {
+const onUserChanged: AuthService["onUserChanged"] = (callback) =>
   getAuth().onAuthStateChanged((maybeFirebaseUser) => {
     if (!maybeFirebaseUser) return callback(null);
     return callback(transformUser(maybeFirebaseUser));
   });
-};
 
 const signIn: AuthService["signIn"] = async (provider) => {
   const providerList: Record<AuthProviders, FirebaseAuthProvider> = {

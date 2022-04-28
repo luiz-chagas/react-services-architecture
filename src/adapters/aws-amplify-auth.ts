@@ -30,7 +30,7 @@ const getUser: AuthService["getUser"] = () =>
     .then(convertUser)
     .catch((err) => null);
 
-const onUserChanged: AuthService["onUserChanged"] = (callback) => {
+const onUserChanged: AuthService["onUserChanged"] = (callback) =>
   Hub.listen("auth", ({ payload: { event, data } }) => {
     if (event === "signIn") {
       const ourUser = convertUser(data);
@@ -38,7 +38,6 @@ const onUserChanged: AuthService["onUserChanged"] = (callback) => {
     }
     if (event === "signOut") return callback(null);
   });
-};
 
 // This function translates a Cognito User to the User type our
 // application has defined, so no Cognito User types will

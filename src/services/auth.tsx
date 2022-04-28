@@ -21,11 +21,12 @@ export type AuthProviders = "Google" | "Facebook";
 export interface AuthService {
   getUser: () => Promise<User | null>;
   init: () => void;
-  onUserChanged: (callback: UserChangedEventCallback) => void;
+  onUserChanged: (callback: UserChangedEventCallback) => UnsubscribeFn;
   signIn: (provider: AuthProviders) => Promise<void>;
   signOut: () => Promise<void>;
   // Other functions to consider: siugnUp, updateUser, deleteAccount, resetPassword, setUpMFA, etc
 }
+type UnsubscribeFn = () => void;
 
 export const AuthErrors = {
   ServiceNotSetUp: "Auth Service has not been set up",
@@ -54,9 +55,7 @@ const AuthContext = createContext<AuthServiceContext>({
   isLoading: true,
 });
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export const makeAuthContextProvider = (serviceProvider: AuthService) => {
   serviceProvider.init();
@@ -66,10 +65,12 @@ export const makeAuthContextProvider = (serviceProvider: AuthService) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-      serviceProvider.onUserChanged((maybeUser) => {
+      const unsubscribe = serviceProvider.onUserChanged((maybeUser) => {
         setIsLoading(false);
         setUser(maybeUser);
       });
+      // Return unsubscribe function to be called in case this context ever gets unmounted
+      return unsubscribe;
     }, []);
 
     useEffect(() => {

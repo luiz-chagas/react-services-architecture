@@ -19,6 +19,7 @@ export const FakeAuthService: AuthService = {
   onUserChanged: (callback) => {
     userChangedCB = callback;
     callback(null);
+    return () => void 0;
   },
   signIn: async () => {
     setTimeout(() => {
