@@ -24,7 +24,7 @@ export interface AuthService {
   onUserChanged: (callback: UserChangedEventCallback) => UnsubscribeFn;
   signIn: (provider: AuthProviders) => Promise<void>;
   signOut: () => Promise<void>;
-  // Other functions to consider: siugnUp, updateUser, deleteAccount, resetPassword, setUpMFA, etc
+  // Other functions to consider: signUp, updateUser, deleteAccount, resetPassword, setUpMFA, etc
 }
 type UnsubscribeFn = () => void;
 
