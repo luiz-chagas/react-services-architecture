@@ -21,10 +21,11 @@ const firebaseConfig = {
   measurementId: "G-JCT9H5M586",
 };
 
-const initializeFirebase: AuthService["init"] = () => {
+const init: AuthService["init"] = () => {
   if (getApps().length === 0) {
     initializeApp(firebaseConfig);
   }
+  return Promise.resolve();
 };
 
 // This function translates a FirebaseUser to the User type our
@@ -67,7 +68,7 @@ const signOut: AuthService["signOut"] = () => getAuth().signOut();
 
 export const FirebaseAuthService: AuthService = {
   getUser,
-  init: initializeFirebase,
+  init,
   onUserChanged,
   signIn,
   signOut,

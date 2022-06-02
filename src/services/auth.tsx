@@ -7,9 +7,9 @@ export type AuthProviders = "Google" | "Facebook";
 // Make sure this interface will fulfill all the needs of the application
 export interface AuthService {
   getUser: () => Promise<User | null>;
-  init: () => void;
+  init: () => Promise<void>;
   onUserChanged: (callback: UserChangedEventCallback) => UnsubscribeFn;
-  signIn: (provider: AuthProviders) => Promise<void>;
+  signIn: (provider: AuthProviders) => Promise<User | null>;
   signOut: () => Promise<void>;
   // Other functions to consider: signUp, updateUser, deleteAccount, resetPassword, setUpMFA, etc
 }

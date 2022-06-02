@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
   PropsWithChildren,
+  useCallback,
 } from "react";
 import { User } from "../../models/user";
 import { AuthErrors, AuthProviders, AuthService } from "../../services/auth";
@@ -17,7 +18,7 @@ import { AuthErrors, AuthProviders, AuthService } from "../../services/auth";
 interface AuthServiceContext {
   currentUser: User | null;
   isLoading: boolean;
-  signIn: (provider: AuthProviders) => Promise<void>;
+  signIn: (provider: AuthProviders) => Promise<User | null>;
   signOut: () => Promise<void>;
 }
 
@@ -64,17 +65,24 @@ export const AuthContextProvider = ({
     });
   }, [authService]);
 
+  const signIn = useCallback(
+    async (provider: AuthProviders) => {
+      setIsLoading(true);
+      const maybeUser = await authService.signIn(provider);
+      setUser(maybeUser);
+      return maybeUser;
+    },
+    [authService]
+  );
+
   const value: AuthServiceContext = useMemo(
     () => ({
       currentUser: user,
-      isLoading: isLoading,
-      signIn: (provider) => {
-        setIsLoading(true);
-        return authService.signIn(provider);
-      },
+      isLoading,
+      signIn,
       signOut: authService.signOut,
     }),
-    [authService, isLoading, user]
+    [authService.signOut, isLoading, signIn, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

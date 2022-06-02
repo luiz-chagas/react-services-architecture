@@ -4,7 +4,11 @@ import { Amplify, Auth, Hub } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import { User } from "../models/user";
 
-const init: AuthService["init"] = () => Amplify.configure(awsConfig);
+const init: AuthService["init"] = () =>
+  new Promise((resolve) => {
+    Amplify.configure(awsConfig);
+    resolve();
+  });
 
 const signIn: AuthService["signIn"] = async (provider) => {
   const providerList: Record<AuthProviders, CognitoHostedUIIdentityProvider> = {
@@ -17,7 +21,9 @@ const signIn: AuthService["signIn"] = async (provider) => {
 
   return Auth.federatedSignIn({
     provider: selectedProvider,
-  }).then(() => void 0);
+  })
+    .then(() => Auth.currentAuthenticatedUser())
+    .then(convertUser);
 };
 
 const signOut: AuthService["signOut"] = () =>

@@ -15,17 +15,19 @@ let userChangedCB: Parameters<AuthService["onUserChanged"]>[0] = () => void 0;
 // so login persist after refreshing the page
 export const FakeAuthService: AuthService = {
   getUser: () => Promise.resolve(null),
-  init: () => void 0,
+  init: () => Promise.resolve(),
   onUserChanged: (callback) => {
     userChangedCB = callback;
     callback(null);
     return () => void 0;
   },
-  signIn: async () => {
-    setTimeout(() => {
-      userChangedCB(fakeUser);
-    }, 1000);
-  },
+  signIn: async () =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        userChangedCB(fakeUser);
+        resolve(fakeUser);
+      }, 1000);
+    }),
   signOut: async () => {
     userChangedCB(null);
   },

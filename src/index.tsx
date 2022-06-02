@@ -4,6 +4,8 @@ import "./index.css";
 import { App } from "./ui/App";
 import reportWebVitals from "./reportWebVitals";
 import { AWSAuthService } from "./adapters/aws-amplify-auth";
+// import { FirebaseAuthService } from "./adapters/firebase-auth";
+// import { FakeAuthService } from "./adapters/fake-auth";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
