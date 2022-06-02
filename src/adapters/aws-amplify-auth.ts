@@ -4,11 +4,21 @@ import { Amplify, Auth, Hub } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import { User } from "../models/user";
 
-const init: AuthService["init"] = () =>
-  new Promise((resolve) => {
-    Amplify.configure(awsConfig);
-    resolve();
-  });
+// This function translates a Cognito User to the User type our
+// application has defined, so no Cognito User types will
+// ever leak into our application
+const convertUser = (awsUser: any): User => {
+  return {
+    email: awsUser.attributes?.email,
+    id: awsUser.username,
+    name: awsUser.attributes?.name,
+  };
+};
+
+const init: AuthService["init"] = () => {
+  Amplify.configure(awsConfig);
+  return Promise.resolve();
+};
 
 const signIn: AuthService["signIn"] = async (provider) => {
   const providerList: Record<AuthProviders, CognitoHostedUIIdentityProvider> = {
@@ -44,17 +54,6 @@ const onUserChanged: AuthService["onUserChanged"] = (callback) =>
     }
     if (event === "signOut") return callback(null);
   });
-
-// This function translates a Cognito User to the User type our
-// application has defined, so no Cognito User types will
-// ever leak into our application
-const convertUser = (awsUser: any): User => {
-  return {
-    email: awsUser.attributes?.email,
-    id: awsUser.username,
-    name: awsUser.attributes?.name,
-  };
-};
 
 export const AWSAuthService: AuthService = {
   init,

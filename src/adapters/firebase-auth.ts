@@ -13,6 +13,15 @@ import { getApps, initializeApp } from "firebase/app";
 import { User } from "../models/user";
 import { AuthErrors, AuthProviders, AuthService } from "../services/auth";
 
+// This function translates a FirebaseUser to the User type our
+// application has defined, so no FirebaseUser types will
+// ever leak into our application
+const convertUser = (user: FirebaseUser): User => ({
+  id: user.uid,
+  email: user.email,
+  name: user.displayName ?? "Visitor",
+});
+
 const firebaseConfig = {
   apiKey: "AIzaSyClXdQIt9upmTwCMMNzlBnz3jWZRqi8rg8",
   authDomain: "fir-login-1d61d.firebaseapp.com",
@@ -28,27 +37,18 @@ const init: AuthService["init"] = () => {
   return Promise.resolve();
 };
 
-// This function translates a FirebaseUser to the User type our
-// application has defined, so no FirebaseUser types will
-// ever leak into our application
-const transformUser = (user: FirebaseUser): User => ({
-  id: user.uid,
-  email: user.email,
-  name: user.displayName ?? "Visitor",
-});
-
 const getUser: AuthService["getUser"] = async () => {
   const firebaseUser = getAuth().currentUser;
 
   if (!firebaseUser) return null;
 
-  return transformUser(firebaseUser);
+  return convertUser(firebaseUser);
 };
 
 const onUserChanged: AuthService["onUserChanged"] = (callback) =>
   getAuth().onAuthStateChanged((maybeFirebaseUser) => {
     if (!maybeFirebaseUser) return callback(null);
-    return callback(transformUser(maybeFirebaseUser));
+    return callback(convertUser(maybeFirebaseUser));
   });
 
 const signIn: AuthService["signIn"] = async (provider) => {
