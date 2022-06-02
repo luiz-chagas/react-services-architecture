@@ -1,4 +1,4 @@
-import { useAuth } from "../../services/auth";
+import { useAuth } from "../../providers/auth-provider";
 
 export const SignIn = () => {
   const { signIn } = useAuth();

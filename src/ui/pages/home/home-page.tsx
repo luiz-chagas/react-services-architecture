@@ -2,8 +2,8 @@
 // with Firebase or Fake-Auth or something else
 // and it really shouldn't matter
 
-import { useAuth } from "../../services/auth";
-import { Loading } from "../../ui/loading";
+import { useAuth } from "../../providers/auth-provider";
+import { Loading } from "../../components/loading/loading";
 import { SignIn } from "../sign-in";
 import { Content } from "./content";
 

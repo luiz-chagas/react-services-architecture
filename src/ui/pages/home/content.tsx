@@ -1,5 +1,5 @@
-import { User } from "../../models/user";
-import { useAuth } from "../../services/auth";
+import { User } from "../../../models/user";
+import { useAuth } from "../../providers/auth-provider";
 
 interface Props {
   user: User;

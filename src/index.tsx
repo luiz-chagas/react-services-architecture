@@ -1,15 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { App } from "./App";
+import { App } from "./ui/App";
 import reportWebVitals from "./reportWebVitals";
+import { AWSAuthService } from "./adapters/aws-amplify-auth";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+// This is the perfect place for us to supply dependencies to our App
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App authService={AWSAuthService} />
   </React.StrictMode>
 );
 
