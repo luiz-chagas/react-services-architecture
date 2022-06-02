@@ -14,10 +14,9 @@ export interface AuthService {
   // Other functions to consider: signUp, updateUser, deleteAccount, resetPassword, setUpMFA, etc
 }
 type UnsubscribeFn = () => void;
+type UserChangedEventCallback = (x: User | null) => void;
 
 export const AuthErrors = {
   ServiceNotSetUp: "Auth Service has not been set up",
   InvalidProdiver: "Provider not supported",
 };
-
-type UserChangedEventCallback = (x: User | null) => void;
