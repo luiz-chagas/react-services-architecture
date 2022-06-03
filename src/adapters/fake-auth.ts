@@ -7,6 +7,7 @@ const fakeUser = {
   email: "luiz@luiz.com",
   id: "123",
   name: "Luiz Chagas",
+  type: "user" as const,
 };
 
 let userChangedCB: Parameters<AuthService["onUserChanged"]>[0] = () => void 0;

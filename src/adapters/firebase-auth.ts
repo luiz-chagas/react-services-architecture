@@ -20,6 +20,7 @@ const convertUser = (user: FirebaseUser): User => ({
   id: user.uid,
   email: user.email,
   name: user.displayName ?? "Visitor",
+  type: "user",
 });
 
 const firebaseConfig = {

@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
 import "./index.css";
 import { App } from "./ui/App";
-import reportWebVitals from "./reportWebVitals";
 import { AWSAuthService } from "./adapters/aws-amplify-auth";
-// import { FirebaseAuthService } from "./adapters/firebase-auth";
-// import { FakeAuthService } from "./adapters/fake-auth";
+import { LocalTaskStorage } from "./adapters/task-storage";
+import { LocalUserStorage } from "./adapters/user-storage";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,7 +15,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App authService={AWSAuthService} />
+    <App
+      authService={AWSAuthService}
+      userStorageService={LocalUserStorage}
+      taskStorageService={LocalTaskStorage}
+    />
   </React.StrictMode>
 );
 

@@ -12,6 +12,7 @@ const convertUser = (awsUser: any): User => {
     email: awsUser.attributes?.email,
     id: awsUser.username,
     name: awsUser.attributes?.name,
+    type: "user",
   };
 };
 
