@@ -1,12 +1,25 @@
-# React Auth Service
+# React Services Architecture
 
 This project shows an example of how to set up a service interface so external providers can adapt to your application.
 
+## Motivation
+
+This is how I perceive most React applications, which is fine but does not scale well after many features:
+![old style react application](https://github.com/luiz-chagas/react-services-architecture/blob/main/old-style.jpg?raw=true)
+
+After some research, I would like to propose writing applications with the following design:
+
+![structured react application](https://github.com/luiz-chagas/react-services-architecture/blob/main/better-style.jpg?raw=true)
+
+There are pros and cons to either models but I believe the proposed one is better suited for evolving applications.
+
 ## Structure
 
-This application defines some service interfaces (example: `AuthService`) that must be implemented by external providers.
+This repo has an application defined with some service interfaces (example: `AuthService`) that must be implemented by external providers.
 
-It also defines hooks (example: `useAuth`) that integrates a service provider and makes it available for consumers (React components/hooks in this case)
+It also defines hooks (example: `useAuth`) that integrates a service provider and makes it available for consumers (React components/hooks in this case).
+
+It does not implement the whole architecture in the picture above but it's a good start.
 
 ## Defining new services
 
