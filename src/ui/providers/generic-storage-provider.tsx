@@ -5,7 +5,7 @@
 import { StorageErrors, StorageService, WithID } from "../../services/storage";
 import { createContext, PropsWithChildren, useContext, useEffect } from "react";
 
-// This is what our React components/hooks will consume
+// This is what React components/hooks will consume
 type StorageContext<T extends WithID> = Pick<
   StorageService<T>,
   "findAll" | "findById" | "remove" | "save" | "create"
@@ -16,7 +16,7 @@ interface ProviderParams<T extends WithID> {
 }
 
 export const makeStorageProvider = <T extends WithID>(name: string) => {
-  // We need to set up a default context
+  // Create a storage context
   const ReactStorageContext = createContext<StorageContext<T> | null>(null);
   ReactStorageContext.displayName = name;
 
@@ -50,5 +50,6 @@ export const makeStorageProvider = <T extends WithID>(name: string) => {
     return ctx;
   };
 
-  return { ContextProvider, useStorage };
+  //Returning a tuple for easier renaming
+  return [ContextProvider, useStorage] as const;
 };

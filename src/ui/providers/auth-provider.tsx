@@ -1,6 +1,6 @@
 // This file connects an AuthService instance with
 // the React context our application is going to use
-// It doesn't matter where the service is coming from (firebase, fake, aws, etc)
+// It doesn't matter where the service is coming from (firebase, aws, fake implementation, etc)
 
 import {
   createContext,
@@ -14,7 +14,7 @@ import {
 import { User } from "../../models/user";
 import { AuthErrors, AuthProviders, AuthService } from "../../services/auth";
 
-// This is what our React components/hooks will consume
+// This is what React components/hooks will consume
 interface AuthServiceContext {
   currentUser: User | null;
   isLoading: boolean;
@@ -22,17 +22,8 @@ interface AuthServiceContext {
   signOut: () => Promise<void>;
 }
 
-// We need to set up a default context
-const AuthContext = createContext<AuthServiceContext>({
-  signIn: async () => {
-    throw Error(AuthErrors.ServiceNotSetUp);
-  },
-  signOut: async () => {
-    throw Error(AuthErrors.ServiceNotSetUp);
-  },
-  currentUser: null,
-  isLoading: true,
-});
+// Create the context
+const AuthContext = createContext<AuthServiceContext | null>(null);
 
 interface ProviderParams {
   authService: AuthService;
@@ -88,4 +79,11 @@ export const AuthContextProvider = ({
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (ctx === null) {
+    throw Error(AuthErrors.ServiceNotSetUp);
+  }
+
+  return ctx;
+};
