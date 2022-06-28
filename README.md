@@ -5,11 +5,11 @@ This project shows an example of how to set up a service interface so external p
 ## Motivation
 
 This is how I perceive most React applications, which is fine but does not scale well after many features:
-![old style react application](https://github.com/luiz-chagas/react-services-architecture/blob/main/old-style.jpg?raw=true)
+![old style react application](https://github.com/luiz-chagas/react-services-architecture/blob/main/old-style.png?raw=true)
 
 After some research, I would like to propose writing applications with the following design:
 
-![structured react application](https://github.com/luiz-chagas/react-services-architecture/blob/main/better-style.jpg?raw=true)
+![structured react application](https://github.com/luiz-chagas/react-services-architecture/blob/main/better-style.png?raw=true)
 
 There are pros and cons to either models but I believe the proposed one is better suited for evolving applications.
 
