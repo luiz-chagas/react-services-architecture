@@ -1,11 +1,12 @@
 import "./index.css";
 import { App } from "./ui/App";
-import { AWSAuthService } from "./adapters/aws-amplify-auth";
 import { LocalTaskStorage } from "./adapters/task-storage";
 import { LocalUserStorage } from "./adapters/user-storage";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
+import { ConsoleLogger } from "./adapters/consoler-logger";
+import { FakeAuthService } from "./adapters/fake-auth";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,7 +17,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <App
-      authService={AWSAuthService}
+      authService={FakeAuthService}
+      loggerService={ConsoleLogger}
       userStorageService={LocalUserStorage}
       taskStorageService={LocalTaskStorage}
     />

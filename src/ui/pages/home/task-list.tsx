@@ -1,23 +1,29 @@
 import { useCallback, useEffect, useState } from "react";
 import { Task as TaskType } from "../../../models/task";
 import { Task } from "../../components/task/task";
+import { useLogger } from "../../providers/logger-provider";
 import { useTaskStorage } from "../../providers/task-storage-provider";
 
 export const TaskList = () => {
   const { findAll, create, save, remove } = useTaskStorage();
+  const logger = useLogger();
 
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [newTask, setNewTask] = useState("");
 
   const loadTasks = useCallback(() => {
-    findAll().then((tasks) => setTasks(tasks));
-  }, [findAll]);
+    findAll()
+      .then((tasks) => setTasks(tasks))
+      .then(() => logger.info("Tasks loaded"));
+  }, [findAll, logger]);
 
   const deleteTask = useCallback(
     (id: string) => {
-      remove(id).then(loadTasks);
+      remove(id)
+        .then(() => logger.info("Task deleted"))
+        .then(loadTasks);
     },
-    [loadTasks, remove]
+    [loadTasks, logger, remove]
   );
 
   const toggleTask = useCallback(
@@ -35,12 +41,12 @@ export const TaskList = () => {
         createdBy: "user",
         name: description,
         type: "task",
-      }).then(() => {
-        loadTasks();
-        setNewTask("");
-      });
+      })
+        .then(() => logger.info("New task created"))
+        .then(() => setNewTask(""))
+        .then(loadTasks);
     },
-    [create, loadTasks]
+    [create, loadTasks, logger]
   );
 
   useEffect(loadTasks, [loadTasks]);
